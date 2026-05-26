@@ -233,6 +233,24 @@ input, select, textarea { font-family: inherit; }
 .products-empty { text-align: center; padding: 80px 24px; color: var(--color-gray); }
 .products-empty__icon { font-size: 3rem; margin-bottom: 16px; }
 
+/* ===== PAGINATION ===== */
+.pagination { margin-top: 48px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.pg-info { font-size: .85rem; color: var(--color-gray); }
+.pg-buttons { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: center; }
+.pg-btn {
+  min-width: 40px; height: 40px; padding: 0 10px;
+  border: 1.5px solid var(--color-border); border-radius: 10px;
+  background: #fff; color: var(--color-dark);
+  font-size: .9rem; font-family: inherit; cursor: pointer;
+  transition: all .2s;
+}
+.pg-btn:hover:not(:disabled) { border-color: var(--color-primary); color: var(--color-primary); }
+.pg-btn--active { background: var(--color-primary); border-color: var(--color-primary); color: #fff; font-weight: 600; }
+.pg-btn--active:hover { background: var(--color-primary-dark); border-color: var(--color-primary-dark); color: #fff; }
+.pg-btn--nav { font-size: 1.1rem; }
+.pg-btn:disabled { opacity: .35; cursor: default; }
+.pg-dots { line-height: 40px; color: var(--color-gray); padding: 0 4px; user-select: none; }
+
 /* ===== NEWSLETTER / CONTACT US ===== */
 .newsletter {
   padding: 90px 0;

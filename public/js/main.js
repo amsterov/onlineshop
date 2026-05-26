@@ -6,6 +6,8 @@ let currentCategory = 'all';
 let currentSort = '';
 let currentSearch = '';
 let modalQtyVal = 1;
+let currentPage = 1;
+const PRODUCTS_PER_PAGE = 12;
 
 let CATEGORIES = { all:'Все', sets:'Комплекты', bras:'Бюстгальтеры', panties:'Трусики', bodies:'Боди', corsets:'Корсеты', nightwear:'Пижамы' };
 
@@ -60,7 +62,6 @@ document.addEventListener('DOMContentLoaded', () => {
   updateBadges();
   loadProducts();
   initCart();
-  initNewsletter();
   initScrollTop();
   initIntersectionObserver();
   initSizeGuide();
@@ -96,6 +97,7 @@ function initHeader() {
       document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
       link.classList.add('active');
       currentCategory = link.dataset.category;
+      currentPage = 1;
       syncCatTabs(currentCategory);
       renderProducts();
       closeNav();
@@ -111,14 +113,17 @@ function initHeader() {
     searchBar.classList.remove('open');
     searchInput.value = '';
     currentSearch = '';
+    currentPage = 1;
     renderProducts();
   });
   searchInput.addEventListener('input', () => {
     currentSearch = searchInput.value.trim();
+    currentPage = 1;
     renderProducts();
   });
   document.getElementById('sortSelect').addEventListener('change', e => {
     currentSort = e.target.value;
+    currentPage = 1;
     renderProducts();
   });
   document.getElementById('cartToggle').addEventListener('click', openCart);
@@ -157,12 +162,56 @@ function renderProducts() {
   else if (currentSort === 'price_desc') products.sort((a, b) => b.price - a.price);
   else if (currentSort === 'rating') products.sort((a, b) => b.rating - a.rating);
 
+  const totalCount = products.length;
+  const totalPages = Math.max(1, Math.ceil(totalCount / PRODUCTS_PER_PAGE));
+  if (currentPage > totalPages) currentPage = totalPages;
+  const start = (currentPage - 1) * PRODUCTS_PER_PAGE;
+  const paged = products.slice(start, start + PRODUCTS_PER_PAGE);
+
   const grid = document.getElementById('productsGrid');
   const empty = document.getElementById('productsEmpty');
-  if (products.length === 0) { grid.innerHTML = ''; empty.style.display = 'block'; return; }
+  if (totalCount === 0) { grid.innerHTML = ''; empty.style.display = 'block'; renderPagination(0, 0); return; }
   empty.style.display = 'none';
-  grid.innerHTML = products.map((p, i) => productCard(p, i)).join('');
+  grid.innerHTML = paged.map((p, i) => productCard(p, i)).join('');
+  renderPagination(totalPages, totalCount);
 }
+
+function renderPagination(totalPages, totalCount) {
+  const el = document.getElementById('pagination');
+  if (!el) return;
+  if (totalPages <= 1) { el.innerHTML = ''; return; }
+
+  const start = (currentPage - 1) * PRODUCTS_PER_PAGE + 1;
+  const end = Math.min(currentPage * PRODUCTS_PER_PAGE, totalCount);
+
+  const nums = [];
+  for (let i = 1; i <= totalPages; i++) {
+    if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) nums.push(i);
+  }
+  let pages = '';
+  let prev = 0;
+  for (const p of nums) {
+    if (prev && p - prev > 1) pages += `<span class="pg-dots">…</span>`;
+    pages += `<button class="pg-btn${p === currentPage ? ' pg-btn--active' : ''}" onclick="goToPage(${p})">${p}</button>`;
+    prev = p;
+  }
+
+  el.innerHTML = `
+    <div class="pg-info">Показано ${start}–${end} из ${totalCount} товаров</div>
+    <div class="pg-buttons">
+      <button class="pg-btn pg-btn--nav" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>‹</button>
+      ${pages}
+      <button class="pg-btn pg-btn--nav" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>›</button>
+    </div>
+  `;
+}
+
+window.goToPage = function(page) {
+  if (page < 1) return;
+  currentPage = page;
+  renderProducts();
+  document.getElementById('shop').scrollIntoView({ behavior: 'smooth' });
+};
 
 function productCard(p, i) {
   const discount = p.oldPrice ? Math.round((1 - p.price / p.oldPrice) * 100) : 0;
@@ -545,14 +594,6 @@ function initPhoneMask() {
 }
 
 // ===== OTHER =====
-function initNewsletter() {
-  document.getElementById('newsletterForm').addEventListener('submit', e => {
-    e.preventDefault();
-    showToast('Вы подписались! Скидка 10% уже на вашем email ✉️', 'success');
-    e.target.reset();
-  });
-}
-
 function initScrollTop() {
   document.getElementById('scrollTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 }
@@ -588,6 +629,7 @@ function initCatTabs() {
       tab.classList.add('active');
       // Filter
       currentCategory = cat;
+      currentPage = 1;
       renderProducts();
     });
   });
