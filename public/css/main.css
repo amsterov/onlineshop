@@ -493,7 +493,10 @@ input, select, textarea { font-family: inherit; }
 .brand-story__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
 .brand-story__title { font-family: var(--font-serif); font-size: clamp(2.2rem, 4vw, 3.2rem); font-weight: 300; line-height: 1.15; margin-bottom: 22px; }
 .brand-story__title em { font-style: italic; color: var(--color-primary); display: block; }
-.brand-story__desc { font-size: .92rem; line-height: 1.9; color: var(--color-gray); margin-bottom: 40px; }
+.brand-story__desc { font-size: .92rem; line-height: 1.9; color: var(--color-gray); margin-bottom: 20px; }
+.brand-story__reasons { list-style: none; padding: 0; margin: 0 0 40px; display: flex; flex-direction: column; gap: 8px; }
+.brand-story__reasons li { font-size: .88rem; color: var(--color-gray); display: flex; align-items: center; gap: 10px; }
+.brand-story__reasons li::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--color-primary); flex-shrink: 0; }
 .brand-story__stats { display: flex; gap: 40px; }
 .brand-story__num { font-family: var(--font-serif); font-size: 2.6rem; font-weight: 300; color: var(--color-primary); line-height: 1; margin-bottom: 4px; }
 .brand-story__label { font-size: .7rem; text-transform: uppercase; letter-spacing: .14em; color: var(--color-gray); font-weight: 500; }
