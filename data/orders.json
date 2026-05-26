@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1779731662102,
+    "name": "rasul",
+    "phone": "+77077750168",
+    "email": "rasulumarov411@gmail.com",
+    "address": "Абрикосовая 119",
+    "comment": "",
+    "items": [
+      {
+        "id": 8,
+        "name": "Пижама «Луна»",
+        "price": 3900,
+        "category": "nightwear",
+        "qty": 1
+      }
+    ],
+    "total": 3900,
+    "status": "new",
+    "createdAt": "2026-05-25T17:54:22.102Z"
+  }
+]

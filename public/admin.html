@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LORA Admin — Панель управления</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+
+<!-- Login Screen -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">
+      <span class="login-logo__text">LORA</span>
+      <span class="login-logo__sub">portal сотрудника</span>
+    </div>
+    <h2 class="login-title">Вход в систему</h2>
+    <div class="login-security-badge">🔒 Защищённый вход · Алматы</div>
+    <form id="loginForm" autocomplete="off">
+      <div class="form-group">
+        <label>Логин</label>
+        <input type="text" id="loginUser" required autocomplete="username" placeholder="Ваш логин">
+      </div>
+      <div class="form-group">
+        <label>Пароль</label>
+        <div class="password-wrap">
+          <input type="password" id="loginPass" required autocomplete="current-password" placeholder="Пароль">
+          <button type="button" class="show-pass" onclick="togglePass()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="login-error" id="loginError"></div>
+      <button type="submit" class="btn btn--primary btn--full" id="loginBtn">Войти</button>
+    </form>
+    <p class="login-hint">Аккаунт блокируется после 5 неверных попыток</p>
+  </div>
+</div>
+
+<!-- Admin App -->
+<div class="admin-app" id="adminApp" style="display:none">
+
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="admin-sidebar__logo">
+      <span class="logo-text">LORA</span>
+      <span class="logo-sub">admin</span>
+    </div>
+    <div class="admin-sidebar__employee" id="sidebarEmployee">
+      <div class="emp-avatar" id="empAvatar">A</div>
+      <div>
+        <div class="emp-name" id="empName">—</div>
+        <div class="emp-role" id="empRole">—</div>
+      </div>
+    </div>
+    <nav class="admin-nav">
+      <a href="#" class="admin-nav__item active" data-page="dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Дашборд
+      </a>
+      <a href="#" class="admin-nav__item" data-page="products">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        Товары
+      </a>
+      <a href="#" class="admin-nav__item" data-page="orders">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Заказы
+      </a>
+      <a href="#" class="admin-nav__item admin-only" data-page="employees">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Сотрудники
+      </a>
+      <a href="#" class="admin-nav__item admin-only" data-page="audit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Журнал безопасности
+      </a>
+      <a href="#" class="admin-nav__item" data-page="returns">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 14l-4-4 4-4"/><path d="M5 10h11a4 4 0 0 1 0 8h-1"/></svg>
+        Заявки на возврат
+      </a>
+      <a href="#" class="admin-nav__item" data-page="password">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Сменить пароль
+      </a>
+    </nav>
+    <div class="admin-sidebar__footer">
+      <a href="/" target="_blank" class="admin-nav__item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Открыть сайт
+      </a>
+      <button class="admin-nav__item" id="logoutBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Выйти
+      </button>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <button class="sidebar-toggle" id="sidebarToggle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <h1 class="admin-page-title" id="pageTitle">Дашборд</h1>
+      <div class="admin-topbar__right">
+        <div class="topbar-role" id="topbarRole"></div>
+      </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="admin-page" id="page-dashboard">
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-card__icon" style="background:#fce8ee;color:#c9a96e"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg></div><div class="stat-card__info"><div class="stat-card__value" id="statProducts">—</div><div class="stat-card__label">Товаров</div></div></div>
+        <div class="stat-card"><div class="stat-card__icon" style="background:#e8f5e9;color:#27ae60"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><div class="stat-card__info"><div class="stat-card__value" id="statOrders">—</div><div class="stat-card__label">Всего заказов</div></div></div>
+        <div class="stat-card"><div class="stat-card__icon" style="background:#fff8e1;color:#f39c12"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div class="stat-card__info"><div class="stat-card__value" id="statRevenue">—</div><div class="stat-card__label">Выручка (₸)</div></div></div>
+        <div class="stat-card"><div class="stat-card__icon" style="background:#fdecea;color:#e74c3c"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><div class="stat-card__info"><div class="stat-card__value" id="statNew">—</div><div class="stat-card__label">Новых заказов</div></div></div>
+      </div>
+      <div class="admin-section">
+        <h2 class="section-title">Последние заказы</h2>
+        <div class="table-wrap">
+          <table class="admin-table"><thead><tr><th>#</th><th>Клиент</th><th>Город</th><th>Сумма</th><th>Статус</th><th>Дата</th></tr></thead>
+          <tbody id="dashOrdersBody"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRODUCTS -->
+    <div class="admin-page" id="page-products" style="display:none">
+      <div class="page-actions">
+        <div class="search-wrap"><input type="text" id="productSearch" placeholder="Поиск товаров..."></div>
+        <button class="btn btn--primary editor-only" id="addProductBtn">+ Добавить товар</button>
+      </div>
+      <div class="table-wrap">
+        <table class="admin-table">
+          <thead><tr><th>ID</th><th>Товар</th><th>Категория</th><th>Цена (₸)</th><th>Статус</th><th>Рейтинг</th><th>Действия</th></tr></thead>
+          <tbody id="productsTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ORDERS -->
+    <div class="admin-page" id="page-orders" style="display:none">
+      <div class="page-actions">
+        <div class="search-wrap"><input type="text" id="orderSearch" placeholder="Поиск по имени, email..."></div>
+        <select id="orderStatusFilter" class="filter-select">
+          <option value="">Все статусы</option>
+          <option value="new">Новый</option>
+          <option value="processing">В обработке</option>
+          <option value="shipped">Отправлен</option>
+          <option value="delivered">Доставлен</option>
+          <option value="cancelled">Отменён</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table class="admin-table">
+          <thead><tr><th>#</th><th>Клиент</th><th>Телефон</th><th>Город</th><th>Сумма</th><th>Статус</th><th>Дата</th><th>Изменить</th></tr></thead>
+          <tbody id="ordersTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- EMPLOYEES (admin only) -->
+    <div class="admin-page" id="page-employees" style="display:none">
+      <div class="page-actions">
+        <div class="search-wrap"><input type="text" id="employeeSearch" placeholder="Поиск сотрудников..."></div>
+        <button class="btn btn--primary" id="addEmployeeBtn">+ Добавить сотрудника</button>
+      </div>
+      <div class="roles-legend">
+        <div class="role-badge role-admin">Администратор — полный доступ</div>
+        <div class="role-badge role-manager">Менеджер — товары и заказы</div>
+        <div class="role-badge role-viewer">Сотрудник — только просмотр</div>
+      </div>
+      <div class="table-wrap">
+        <table class="admin-table">
+          <thead><tr><th>ID</th><th>Сотрудник</th><th>Логин</th><th>Роль</th><th>Последний вход</th><th>Статус</th><th>Действия</th></tr></thead>
+          <tbody id="employeesTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- RETURNS -->
+    <div class="admin-page" id="page-returns" style="display:none">
+      <div class="page-actions">
+        <div class="search-wrap"><input type="text" id="returnSearch" placeholder="Поиск по имени, телефону, товару..."></div>
+        <select id="returnStatusFilter" class="filter-select">
+          <option value="">Все статусы</option>
+          <option value="new">Новые</option>
+          <option value="processing">В работе</option>
+          <option value="resolved">Решено</option>
+          <option value="rejected">Отклонено</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table class="admin-table">
+          <thead><tr><th>#</th><th>Клиент</th><th>Товар</th><th>Причина</th><th>Решение</th><th>Статус</th><th>Дата</th><th>Действия</th></tr></thead>
+          <tbody id="returnsTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CHANGE PASSWORD -->
+    <div class="admin-page" id="page-password" style="display:none">
+      <div class="change-pass-wrap">
+        <div class="change-pass-card">
+          <div class="change-pass-icon">🔑</div>
+          <h2 class="change-pass-title">Смена пароля</h2>
+          <p class="change-pass-subtitle">Изменение пароля вашего аккаунта</p>
+          <form id="changePassForm" autocomplete="off">
+            <div class="form-group">
+              <label>Текущий пароль *</label>
+              <div class="password-wrap">
+                <input type="password" id="cpCurrent" required placeholder="Введите текущий пароль" autocomplete="current-password">
+                <button type="button" class="show-pass" onclick="toggleCpPass('cpCurrent')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Новый пароль * <span style="color:var(--color-gray);font-weight:400;text-transform:none">(мин. 6 символов)</span></label>
+              <div class="password-wrap">
+                <input type="password" id="cpNew" required placeholder="Придумайте новый пароль" autocomplete="new-password">
+                <button type="button" class="show-pass" onclick="toggleCpPass('cpNew')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Подтвердите новый пароль *</label>
+              <div class="password-wrap">
+                <input type="password" id="cpConfirm" required placeholder="Повторите новый пароль" autocomplete="new-password">
+                <button type="button" class="show-pass" onclick="toggleCpPass('cpConfirm')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="change-pass-error" id="cpError"></div>
+            <button type="submit" class="btn btn--primary btn--full" id="cpBtn">Изменить пароль</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- AUDIT LOG (admin only) -->
+    <div class="admin-page" id="page-audit" style="display:none">
+      <div class="audit-info">
+        🔒 Журнал фиксирует все входы в систему и критические действия. Хранятся последние 500 записей.
+      </div>
+      <div class="table-wrap">
+        <table class="admin-table">
+          <thead><tr><th>Время</th><th>Пользователь</th><th>Действие</th><th>IP адрес</th></tr></thead>
+          <tbody id="auditTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Product Modal -->
+<div class="modal-backdrop" id="productModalBg">
+  <div class="modal">
+    <div class="modal__header">
+      <h3 id="productFormTitle">Добавить товар</h3>
+      <button class="modal__close" id="closeProductModal">✕</button>
+    </div>
+    <form id="productForm" enctype="multipart/form-data">
+      <input type="hidden" id="productId">
+      <div class="modal__body">
+        <div class="form-row">
+          <div class="form-group"><label>Название *</label><input type="text" id="pName" required placeholder="Название товара"></div>
+          <div class="form-group">
+            <label>Категория *</label>
+            <select id="pCategory" required onchange="updateSizeType()">
+              <option value="">Выберите...</option>
+              <option value="sets">Комплекты</option>
+              <option value="bras">Бюстгальтеры</option>
+              <option value="panties">Трусики</option>
+              <option value="bodies">Боди</option>
+              <option value="corsets">Корсеты</option>
+              <option value="nightwear">Пижамы / Домашняя одежда</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Цена (₸) *</label><input type="number" id="pPrice" required min="0" placeholder="14900"></div>
+          <div class="form-group"><label>Старая цена (₸)</label><input type="number" id="pOldPrice" min="0" placeholder="19900"></div>
+        </div>
+        <div class="form-group"><label>Описание *</label><textarea id="pDescription" rows="3" required placeholder="Описание товара..."></textarea></div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Тип размеров</label>
+            <select id="pSizeType" onchange="fillDefaultSizes()">
+              <option value="clothing">Одежда (XS–XXL)</option>
+              <option value="bra">Бюстгальтер (70B, 75C...)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Размеры (через запятую)</label>
+            <input type="text" id="pSizes" placeholder="XS, S, M, L, XL, XXL">
+          </div>
+        </div>
+        <div class="sizes-preset">
+          <span class="preset-label">Быстро добавить:</span>
+          <button type="button" class="preset-btn" onclick="setSizes('XS,S,M,L,XL')">XS–XL</button>
+          <button type="button" class="preset-btn" onclick="setSizes('XS,S,M,L,XL,XXL')">XS–XXL</button>
+          <button type="button" class="preset-btn" onclick="setSizes('70A,70B,70C,75A,75B,75C,75D,80B,80C,80D')">70–80</button>
+          <button type="button" class="preset-btn" onclick="setSizes('70B,70C,75B,75C,75D,80B,80C,80D,85B,85C')">Популярные</button>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Цвета (через запятую)</label>
+            <input type="text" id="pColors" placeholder="розовый, черный, белый, #c9a96e..." oninput="updateColorPreview(this.value)">
+            <div class="color-preview-chips" id="colorPreviewChips"></div>
+          </div>
+          <div class="form-group"><label>Метка / Бейдж</label><input type="text" id="pBadge" placeholder="Новинка, Хит продаж..."></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Рейтинг (1–5)</label><input type="number" id="pRating" min="1" max="5" step="0.1" placeholder="4.8"></div>
+          <div class="form-group"><label>Кол-во отзывов</label><input type="number" id="pReviews" min="0" placeholder="100"></div>
+        </div>
+        <!-- Image upload -->
+        <div class="form-group">
+          <label>Изображение товара</label>
+          <div class="img-upload-area" id="imgUploadArea">
+            <input type="file" id="pImageFile" accept="image/jpeg,image/jpg,image/png,image/webp" style="display:none">
+            <div class="img-upload-placeholder" id="imgUploadPlaceholder">
+              <div class="upload-icon">📷</div>
+              <div>Нажмите для выбора фото</div>
+              <div class="upload-hint">JPEG, PNG, WEBP · до 5 МБ</div>
+            </div>
+            <div class="img-preview-wrap" id="imgPreviewWrap" style="display:none">
+              <img id="imgPreview" src="" alt="Preview">
+              <button type="button" class="clear-btn" onclick="event.stopPropagation();clearImage()">✕</button>
+            </div>
+          </div>
+          <input type="hidden" id="pImageUrl">
+        </div>
+        <div class="form-group"><label>В наличии</label><select id="pInStock"><option value="true">Да</option><option value="false">Нет</option></select></div>
+      </div>
+      <div class="modal__footer">
+        <button type="button" class="btn btn--outline-dark" id="cancelProductModal">Отмена</button>
+        <button type="submit" class="btn btn--primary" id="saveProductBtn">Сохранить</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Employee Modal -->
+<div class="modal-backdrop" id="employeeModalBg">
+  <div class="modal modal--sm">
+    <div class="modal__header">
+      <h3 id="employeeFormTitle">Добавить сотрудника</h3>
+      <button class="modal__close" onclick="closeEmployeeModal()">✕</button>
+    </div>
+    <form id="employeeForm">
+      <input type="hidden" id="employeeId">
+      <div class="modal__body">
+        <div class="form-group"><label>Имя и должность *</label><input type="text" id="eName" required placeholder="Иванова Алия"></div>
+        <div class="form-group"><label>Логин *</label><input type="text" id="eUsername" required placeholder="aliia_manager" autocomplete="off"></div>
+        <div class="form-group">
+          <label id="ePasswordLabel">Пароль * <span style="color:var(--color-gray);font-weight:400;text-transform:none">(мин. 6 символов)</span></label>
+          <div class="password-wrap">
+            <input type="password" id="ePassword" placeholder="Введите пароль" autocomplete="new-password">
+            <button type="button" class="show-pass" onclick="toggleEmpPass()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Роль *</label>
+          <select id="eRole" required>
+            <option value="viewer">Сотрудник (только просмотр)</option>
+            <option value="manager">Менеджер (товары и заказы)</option>
+            <option value="admin">Администратор (полный доступ)</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Email</label><input type="email" id="eEmail" placeholder="email@lora.kz"></div>
+          <div class="form-group"><label>Телефон</label><input type="tel" id="ePhone" placeholder="+7 (7XX) XXX-XX-XX"></div>
+        </div>
+        <div class="form-group" id="eActiveGroup" style="display:none">
+          <label>Статус аккаунта</label>
+          <select id="eActive"><option value="true">Активен</option><option value="false">Заблокирован</option></select>
+        </div>
+        <div class="form-group" id="eUnlockGroup" style="display:none">
+          <label class="checkbox-label">
+            <input type="checkbox" id="eUnlock"> Разблокировать аккаунт (снять блокировку)
+          </label>
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button type="button" class="btn btn--outline-dark" onclick="closeEmployeeModal()">Отмена</button>
+        <button type="submit" class="btn btn--primary">Сохранить</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Confirm Delete -->
+<div class="modal-backdrop" id="confirmDeleteBg">
+  <div class="modal modal--sm">
+    <div class="modal__header"><h3>Подтвердите удаление</h3><button class="modal__close" onclick="closeDeleteModal()">✕</button></div>
+    <div class="modal__body"><p id="deleteConfirmText">Это действие нельзя отменить.</p></div>
+    <div class="modal__footer">
+      <button class="btn btn--outline-dark" onclick="closeDeleteModal()">Отмена</button>
+      <button class="btn btn--danger" id="confirmDeleteBtn">Удалить</button>
+    </div>
+  </div>
+</div>
+
+<!-- Return Detail Modal -->
+<div class="modal-backdrop" id="returnDetailBg">
+  <div class="modal modal--sm">
+    <div class="modal__header">
+      <h3>Заявка на возврат</h3>
+      <button class="modal__close" onclick="closeReturnDetail()">✕</button>
+    </div>
+    <div class="modal__body" id="returnDetailBody"></div>
+    <div class="modal__footer">
+      <button class="btn btn--outline-dark" onclick="closeReturnDetail()">Закрыть</button>
+    </div>
+  </div>
+</div>
+
+<div class="admin-toast" id="adminToast"></div>
+<script src="/js/admin.js"></script>
+</body>
+</html>

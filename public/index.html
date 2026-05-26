@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LORA — Магазин нижнего белья | Алматы</title>
+  <meta name="description" content="LORA — изысканное нижнее бельё в Казахстане. Доставка по всему Казахстану.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+
+<!-- Preloader -->
+<div class="preloader" id="preloader">
+  <div class="preloader__inner">
+    <div class="preloader__logo">LORA</div>
+    <div class="preloader__dots"><span></span><span></span><span></span></div>
+  </div>
+</div>
+
+<!-- Ticker -->
+<div class="ticker-strip">
+  <div class="ticker-track">
+    <div class="ticker-segment">
+      <span class="ticker-item">🌸 <b>Новая коллекция 2026</b></span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">✨ Бесплатная доставка от <b>15 000 ₸</b></span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">💝 Возврат <b>14 дней</b></span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">🎀 Эксклюзивные коллекции из <b>Алматы</b></span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">💳 <b>Kaspi Pay</b> · Карта банка · Наличные</span><span class="ticker-sep">✦</span>
+    </div>
+    <div class="ticker-segment" aria-hidden="true">
+      <span class="ticker-item">🌸 <b>Новая коллекция 2026</b></span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">✨ Бесплатная доставка от <b>15 000 ₸</b></span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">💝 Возврат <b>14 дней</b></span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">🎀 Эксклюзивные коллекции из <b>Алматы</b></span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">💳 <b>Kaspi Pay</b> · Карта банка · Наличные</span><span class="ticker-sep">✦</span>
+    </div>
+  </div>
+</div>
+
+<!-- Header -->
+<header class="header" id="header">
+  <div class="header__container">
+    <button class="header__burger" id="burgerBtn" aria-label="Меню">
+      <span></span><span></span><span></span>
+    </button>
+    <a href="/" class="header__logo">
+      <span class="header__logo-text">LORA</span>
+      <span class="header__logo-sub">lingerie · almaty</span>
+    </a>
+    <nav class="header__nav" id="mainNav">
+      <ul>
+        <li><a href="#" data-category="all" class="nav-link active">Все</a></li>
+        <li><a href="#" data-category="sets" class="nav-link">Комплекты</a></li>
+        <li><a href="#" data-category="bras" class="nav-link">Бюстгальтеры</a></li>
+        <li><a href="#" data-category="panties" class="nav-link">Трусики</a></li>
+        <li><a href="#" data-category="bodies" class="nav-link">Боди</a></li>
+        <li><a href="#" data-category="corsets" class="nav-link">Корсеты</a></li>
+        <li><a href="#" data-category="nightwear" class="nav-link">Пижамы</a></li>
+      </ul>
+    </nav>
+    <div class="header__actions">
+      <button class="header__action" id="searchToggle" aria-label="Поиск">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+      <button class="header__action" id="wishlistBtn" aria-label="Избранное">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <span class="header__badge" id="wishlistCount">0</span>
+      </button>
+      <button class="header__action" id="cartToggle" aria-label="Корзина">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="header__badge" id="cartCount">0</span>
+      </button>
+    </div>
+  </div>
+  <div class="search-bar" id="searchBar">
+    <input type="text" id="searchInput" placeholder="Поиск товаров...">
+    <button id="searchClose">✕</button>
+  </div>
+</header>
+
+<div class="nav-overlay" id="navOverlay"></div>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero__bg">
+    <div class="hero__particles" id="particles"></div>
+    <div class="hero__gradient"></div>
+  </div>
+  <div class="hero__content">
+    <div class="hero__tag animate-fade-up">Новая коллекция 2026 · Алматы</div>
+    <h1 class="hero__title animate-fade-up delay-1">Искусство<br><em>красоты</em></h1>
+    <p class="hero__subtitle animate-fade-up delay-2">
+      Изысканное нижнее бельё для тех,<br>кто ценит роскошь и комфорт
+    </p>
+    <div class="hero__actions animate-fade-up delay-3">
+      <button class="btn btn--primary" onclick="scrollToProducts()">Смотреть коллекцию</button>
+      <button class="btn btn--outline" onclick="openSizeGuide('clothing')">Таблица размеров</button>
+    </div>
+  </div>
+  <div class="hero__scroll">
+    <span>Прокрутите вниз</span>
+    <div class="hero__scroll-line"></div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="features">
+  <div class="features__container">
+    <div class="feature-item animate-in">
+      <div class="feature-item__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+      <div>
+        <div class="feature-item__title">Доставка по Казахстану</div>
+        <div class="feature-item__text">Бесплатно от 15 000 ₸</div>
+      </div>
+    </div>
+    <div class="feature-item animate-in">
+      <div class="feature-item__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div>
+        <div class="feature-item__title">Гарантия качества</div>
+        <div class="feature-item__text">Натуральные материалы</div>
+      </div>
+    </div>
+    <div class="feature-item animate-in">
+      <div class="feature-item__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+      </div>
+      <div>
+        <div class="feature-item__title">Возврат 14 дней</div>
+        <div class="feature-item__text">Без лишних вопросов</div>
+      </div>
+    </div>
+    <div class="feature-item animate-in">
+      <div class="feature-item__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6 6z"/></svg>
+      </div>
+      <div>
+        <div class="feature-item__title">Поддержка 24/7</div>
+        <div class="feature-item__text">+7 (727) 555-35-35</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Brand Story -->
+<section class="brand-story">
+  <div class="brand-story__container">
+    <div class="brand-story__badge animate-in">О бренде LORA</div>
+    <div class="brand-story__grid">
+      <div class="animate-in">
+        <h2 class="brand-story__title">Роскошь — это<br><em>ваше право</em></h2>
+        <p class="brand-story__desc">LORA — казахстанский бренд нижнего белья из Алматы. Мы создаём изделия, в которых каждая женщина чувствует себя особенной: от утреннего пробуждения до самых особенных моментов жизни.</p>
+        <div class="brand-story__stats">
+          <div>
+            <div class="brand-story__num">500+</div>
+            <div class="brand-story__label">клиенток</div>
+          </div>
+          <div>
+            <div class="brand-story__num">3+</div>
+            <div class="brand-story__label">года бренду</div>
+          </div>
+          <div>
+            <div class="brand-story__num">14</div>
+            <div class="brand-story__label">дней возврата</div>
+          </div>
+        </div>
+      </div>
+      <div class="brand-story__cards animate-in">
+        <div class="brand-card">
+          <div class="brand-card__num">01</div>
+          <div>
+            <h3 class="brand-card__title">Натуральные материалы</h3>
+            <p class="brand-card__text">Шёлк, микрофибра и французское кружево — только лучшее для вашей кожи</p>
+          </div>
+        </div>
+        <div class="brand-card">
+          <div class="brand-card__num">02</div>
+          <div>
+            <h3 class="brand-card__title">Безупречный крой</h3>
+            <p class="brand-card__text">Каждое изделие разработано с учётом женской анатомии для идеальной посадки</p>
+          </div>
+        </div>
+        <div class="brand-card">
+          <div class="brand-card__num">03</div>
+          <div>
+            <h3 class="brand-card__title">Особая упаковка</h3>
+            <p class="brand-card__text">Каждый заказ — как подарок: фирменная коробка и лента в цветах бренда</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Shop -->
+<section class="shop" id="shop">
+  <div class="shop__container">
+    <div class="shop__header">
+      <h2 class="shop__title">Наша коллекция</h2>
+      <div class="shop__controls">
+        <button class="size-guide-link" onclick="openSizeGuide('clothing')">
+          📏 Таблица размеров
+        </button>
+        <div class="sort-select">
+          <select id="sortSelect">
+            <option value="">Сортировка</option>
+            <option value="price_asc">Цена: по возрастанию</option>
+            <option value="price_desc">Цена: по убыванию</option>
+            <option value="rating">По рейтингу</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <!-- Category tabs -->
+    <div class="cat-tabs" id="catTabs">
+      <button class="cat-tab active" data-category="all">Все коллекции</button>
+      <button class="cat-tab" data-category="sets">👙 Комплекты</button>
+      <button class="cat-tab" data-category="bras">🩱 Бюстгальтеры</button>
+      <button class="cat-tab" data-category="panties">🩲 Трусики</button>
+      <button class="cat-tab" data-category="bodies">💃 Боди</button>
+      <button class="cat-tab" data-category="corsets">🎀 Корсеты</button>
+      <button class="cat-tab" data-category="nightwear">🌙 Пижамы</button>
+    </div>
+
+    <div class="products-grid" id="productsGrid"></div>
+    <div class="products-empty" id="productsEmpty" style="display:none">
+      <div class="products-empty__icon">🔍</div>
+      <p>Товары не найдены</p>
+    </div>
+  </div>
+</section>
+
+<!-- Newsletter -->
+<section class="newsletter">
+  <div class="newsletter__container">
+    <div class="newsletter__tag">Эксклюзивно для подписчиков</div>
+    <h2 class="newsletter__title">Будьте <em>первыми</em></h2>
+    <p class="newsletter__text">Подпишитесь на новости и получите скидку <b style="color:var(--color-primary)">10%</b> на первый заказ</p>
+    <form class="newsletter__form" id="newsletterForm">
+      <input type="email" placeholder="Ваш email" required>
+      <button type="submit" class="btn btn--primary">Подписаться</button>
+    </form>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer__container">
+    <div class="footer__brand">
+      <div class="footer__logo">LORA</div>
+      <p>Изысканное бельё для настоящих женщин</p>
+      <p style="margin-top:12px;font-size:.78rem">🇰🇿 г. Алматы, ул. Байтурсынова 83</p>
+      <p style="font-size:.78rem">БИН: 240140012345</p>
+      <p style="margin-top:16px;font-size:.78rem"><a href="#" onclick="openReturnForm();return false" style="color:var(--color-primary);text-decoration:underline">Оформить возврат / обмен →</a></p>
+    </div>
+    <div class="footer__links">
+      <h4>Магазин</h4>
+      <ul>
+        <li><a href="#" onclick="scrollToProducts()">Коллекции</a></li>
+        <li><a href="#" onclick="openSizeGuide('clothing')">Таблица размеров</a></li>
+        <li><a href="#" onclick="openSizeGuide('bra')">Размеры бюстгальтеров</a></li>
+        <li><a href="#">Подарочные сертификаты</a></li>
+      </ul>
+    </div>
+    <div class="footer__links">
+      <h4>Информация</h4>
+      <ul>
+        <li><a href="#">О нас</a></li>
+        <li><a href="#">Доставка и оплата</a></li>
+        <li><a href="#" onclick="openReturnForm();return false">Возврат и обмен</a></li>
+        <li><a href="#">Контакты</a></li>
+      </ul>
+    </div>
+    <div class="footer__contact">
+      <h4>Контакты</h4>
+      <p>📞 +7 (727) 555-35-35</p>
+      <p>📱 +7 (777) 555-35-35</p>
+      <p>✉️ info@lora.kz</p>
+      <div class="footer__social">
+        <a href="#" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+        <a href="#" aria-label="Telegram">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        </a>
+        <a href="#" aria-label="WhatsApp">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <p>© 2024 LORA. Все права защищены. | г. Алматы, Казахстан</p>
+  </div>
+</footer>
+
+<!-- Cart Sidebar -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-sidebar__header">
+    <h3>Корзина</h3>
+    <button class="cart-sidebar__close" id="cartClose">✕</button>
+  </div>
+  <div class="cart-sidebar__items" id="cartItems">
+    <div class="cart-empty"><div class="cart-empty__icon">🛍️</div><p>Ваша корзина пуста</p></div>
+  </div>
+  <div class="cart-sidebar__footer" id="cartFooter" style="display:none">
+    <div class="cart-sidebar__total"><span>Итого:</span><span id="cartTotal">0 ₸</span></div>
+    <div class="cart-sidebar__delivery" id="cartDelivery"></div>
+    <button class="btn btn--primary btn--full" id="checkoutBtn">Оформить заказ</button>
+  </div>
+</div>
+
+<!-- Product Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="product-modal" id="productModal">
+    <button class="product-modal__close" id="modalClose">✕</button>
+    <div class="product-modal__content" id="modalContent"></div>
+  </div>
+</div>
+
+<!-- Checkout Modal -->
+<div class="modal-overlay" id="checkoutOverlay">
+  <div class="checkout-modal">
+    <button class="product-modal__close" id="checkoutClose">✕</button>
+    <h2 class="checkout-modal__title">Оформление заказа</h2>
+    <form id="checkoutForm">
+      <div class="checkout-grid">
+        <div class="form-group">
+          <label>Имя и фамилия *</label>
+          <input type="text" name="name" required placeholder="Ваше имя">
+        </div>
+        <div class="form-group">
+          <label>Телефон *</label>
+          <input type="tel" name="phone" required placeholder="+7 (7XX) XXX-XX-XX" id="phoneInput">
+        </div>
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" name="email" required placeholder="email@example.com">
+        </div>
+        <div class="form-group">
+          <label>Город *</label>
+          <select name="city" required id="citySelect">
+            <option value="">Выберите город...</option>
+            <option>Алматы</option>
+            <option>Астана</option>
+            <option>Шымкент</option>
+            <option>Қарағанды</option>
+            <option>Актобе</option>
+            <option>Тараз</option>
+            <option>Павлодар</option>
+            <option>Өскемен</option>
+            <option>Семей</option>
+            <option>Атырау</option>
+            <option>Қостанай</option>
+            <option>Кызылорда</option>
+            <option>Орал</option>
+            <option>Петропавл</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Адрес доставки *</label>
+        <input type="text" name="address" required placeholder="Улица, дом, квартира">
+      </div>
+      <div class="form-group">
+        <label>Способ оплаты</label>
+        <div class="payment-options">
+          <label class="payment-opt"><input type="radio" name="payment" value="kaspi" checked> Kaspi Pay / QR</label>
+          <label class="payment-opt"><input type="radio" name="payment" value="card"> Карта банка</label>
+          <label class="payment-opt"><input type="radio" name="payment" value="cash"> Наличные при получении</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Комментарий</label>
+        <textarea name="comment" rows="2" placeholder="Пожелания к заказу..."></textarea>
+      </div>
+      <div class="checkout-total" id="checkoutTotalRow"></div>
+      <button type="submit" class="btn btn--primary btn--full">Подтвердить заказ</button>
+    </form>
+  </div>
+</div>
+
+<!-- Size Guide Modal -->
+<div class="modal-overlay" id="sizeGuideOverlay">
+  <div class="size-guide-modal">
+    <button class="product-modal__close" id="sizeGuideClose">✕</button>
+    <div class="size-guide__header">
+      <h2>Таблица размеров</h2>
+      <div class="size-guide__tabs">
+        <button class="sg-tab active" data-tab="clothing" onclick="switchSizeTab('clothing', this)">Трусики / Боди / Пижамы</button>
+        <button class="sg-tab" data-tab="bra" onclick="switchSizeTab('bra', this)">Бюстгальтеры / Комплекты</button>
+        <button class="sg-tab" data-tab="measure" onclick="switchSizeTab('measure', this)">Как измерить</button>
+      </div>
+    </div>
+
+    <div class="sg-content" id="sg-clothing">
+      <p class="sg-hint">Трусики, боди, корсеты, ночная одежда</p>
+      <div class="sg-table-wrap">
+        <table class="sg-table">
+          <thead>
+            <tr>
+              <th>Размер</th><th>Рос. размер</th><th>EU размер</th>
+              <th>Талия (см)</th><th>Бёдра (см)</th><th>Грудь (см)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="size-tag">XS</td><td>40–42</td><td>34–36</td><td>60–64</td><td>86–90</td><td>80–84</td></tr>
+            <tr><td class="size-tag">S</td><td>42–44</td><td>36–38</td><td>64–68</td><td>90–94</td><td>84–88</td></tr>
+            <tr><td class="size-tag">M</td><td>44–46</td><td>38–40</td><td>68–72</td><td>94–98</td><td>88–92</td></tr>
+            <tr><td class="size-tag">L</td><td>46–48</td><td>40–42</td><td>72–76</td><td>98–102</td><td>92–96</td></tr>
+            <tr><td class="size-tag">XL</td><td>48–50</td><td>42–44</td><td>76–80</td><td>102–106</td><td>96–100</td></tr>
+            <tr><td class="size-tag">XXL</td><td>50–52</td><td>44–46</td><td>80–84</td><td>106–110</td><td>100–104</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sg-tip">💡 Если вы между размерами — выбирайте больший для комфорта.</div>
+    </div>
+
+    <div class="sg-content" id="sg-bra" style="display:none">
+      <p class="sg-hint">Бюстгальтеры и комплекты. Размер = обхват + чашка</p>
+      <div class="sg-table-wrap">
+        <table class="sg-table">
+          <thead>
+            <tr>
+              <th>Размер</th><th>Обхват под грудью</th><th>Разница (чашка)</th><th>Объём груди (ор.)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="tr-band"><td colspan="4" class="band-header">Обхват 65 см</td></tr>
+            <tr><td class="size-tag">65A</td><td>63–67 см</td><td>10–11 см (AA/A)</td><td>73–78 см</td></tr>
+            <tr><td class="size-tag">65B</td><td>63–67 см</td><td>12–13 см (B)</td><td>75–80 см</td></tr>
+            <tr><td class="size-tag">65C</td><td>63–67 см</td><td>14–15 см (C)</td><td>77–82 см</td></tr>
+            <tr class="tr-band"><td colspan="4" class="band-header">Обхват 70 см</td></tr>
+            <tr><td class="size-tag">70A</td><td>68–72 см</td><td>10–11 см (A)</td><td>78–83 см</td></tr>
+            <tr><td class="size-tag">70B</td><td>68–72 см</td><td>12–13 см (B)</td><td>80–85 см</td></tr>
+            <tr><td class="size-tag">70C</td><td>68–72 см</td><td>14–15 см (C)</td><td>82–87 см</td></tr>
+            <tr><td class="size-tag">70D</td><td>68–72 см</td><td>16–17 см (D)</td><td>84–89 см</td></tr>
+            <tr class="tr-band"><td colspan="4" class="band-header">Обхват 75 см</td></tr>
+            <tr><td class="size-tag">75A</td><td>73–77 см</td><td>10–11 см (A)</td><td>83–88 см</td></tr>
+            <tr><td class="size-tag">75B</td><td>73–77 см</td><td>12–13 см (B)</td><td>85–90 см</td></tr>
+            <tr><td class="size-tag">75C</td><td>73–77 см</td><td>14–15 см (C)</td><td>87–92 см</td></tr>
+            <tr><td class="size-tag">75D</td><td>73–77 см</td><td>16–17 см (D)</td><td>89–94 см</td></tr>
+            <tr class="tr-band"><td colspan="4" class="band-header">Обхват 80 см</td></tr>
+            <tr><td class="size-tag">80B</td><td>78–82 см</td><td>12–13 см (B)</td><td>90–95 см</td></tr>
+            <tr><td class="size-tag">80C</td><td>78–82 см</td><td>14–15 см (C)</td><td>92–97 см</td></tr>
+            <tr><td class="size-tag">80D</td><td>78–82 см</td><td>16–17 см (D)</td><td>94–99 см</td></tr>
+            <tr><td class="size-tag">80DD</td><td>78–82 см</td><td>18–19 см (DD)</td><td>96–101 см</td></tr>
+            <tr class="tr-band"><td colspan="4" class="band-header">Обхват 85 см</td></tr>
+            <tr><td class="size-tag">85B</td><td>83–87 см</td><td>12–13 см (B)</td><td>95–100 см</td></tr>
+            <tr><td class="size-tag">85C</td><td>83–87 см</td><td>14–15 см (C)</td><td>97–102 см</td></tr>
+            <tr><td class="size-tag">85D</td><td>83–87 см</td><td>16–17 см (D)</td><td>99–104 см</td></tr>
+            <tr class="tr-band"><td colspan="4" class="band-header">Обхват 90 см</td></tr>
+            <tr><td class="size-tag">90C</td><td>88–92 см</td><td>14–15 см (C)</td><td>102–107 см</td></tr>
+            <tr><td class="size-tag">90D</td><td>88–92 см</td><td>16–17 см (D)</td><td>104–109 см</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sg-tip">💡 Не знаете свой размер? Перейдите во вкладку «Как измерить».</div>
+    </div>
+
+    <div class="sg-content" id="sg-measure" style="display:none">
+      <div class="measure-steps">
+        <div class="measure-step">
+          <div class="measure-step__num">1</div>
+          <div class="measure-step__body">
+            <h4>Обхват груди (для бюстгальтера)</h4>
+            <p>Измерьте сантиметровой лентой горизонтально по наиболее выступающей части груди. Лента должна лежать параллельно полу. Это ваш <b>объём груди</b>.</p>
+          </div>
+        </div>
+        <div class="measure-step">
+          <div class="measure-step__num">2</div>
+          <div class="measure-step__body">
+            <h4>Обхват под грудью (обхват = размер)</h4>
+            <p>Измерьте под грудью максимально плотно. Полученное число — ваш <b>обхват (размер)</b>: 70, 75, 80, 85…<br>
+            Округляйте до ближайшего кратного 5: 73 см → 75, 71 см → 70.</p>
+          </div>
+        </div>
+        <div class="measure-step">
+          <div class="measure-step__num">3</div>
+          <div class="measure-step__body">
+            <h4>Определяем чашку (чашка = буква)</h4>
+            <p>Разница = объём груди − обхват под грудью:<br>
+            <span class="cup-row"><b>10–11 см</b> → чашка <b>A</b></span>
+            <span class="cup-row"><b>12–13 см</b> → чашка <b>B</b></span>
+            <span class="cup-row"><b>14–15 см</b> → чашка <b>C</b></span>
+            <span class="cup-row"><b>16–17 см</b> → чашка <b>D</b></span>
+            <span class="cup-row"><b>18–19 см</b> → чашка <b>DD/E</b></span></p>
+          </div>
+        </div>
+        <div class="measure-step">
+          <div class="measure-step__num">4</div>
+          <div class="measure-step__body">
+            <h4>Для трусиков, боди, пижам</h4>
+            <p>Измерьте <b>талию</b> (самое узкое место) и <b>бёдра</b> (самое широкое место, включая ягодицы). Сверьтесь с таблицей одежды выше.</p>
+          </div>
+        </div>
+        <div class="measure-tip">
+          📌 Измеряйте без одежды или в тонком белье. Лента должна лежать ровно и не сдавливать тело.
+        </div>
+      </div>
+    </div>
+
+    <!-- Calculator -->
+    <div class="sg-calculator">
+      <h3>🧮 Быстрый подбор размера бюстгальтера</h3>
+      <div class="calc-row">
+        <div class="calc-field">
+          <label>Обхват под грудью (см)</label>
+          <input type="number" id="calcBand" placeholder="72" min="55" max="120">
+        </div>
+        <div class="calc-field">
+          <label>Объём груди (см)</label>
+          <input type="number" id="calcBust" placeholder="87" min="65" max="140">
+        </div>
+        <button class="btn btn--primary btn--sm" onclick="calculateBraSize()">Подобрать</button>
+      </div>
+      <div class="calc-result" id="calcResult"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Return Modal -->
+<div class="modal-overlay" id="returnOverlay">
+  <div class="return-modal">
+    <div class="return-modal__head">
+      <button class="return-modal__close" onclick="closeReturnForm()">✕</button>
+      <div class="return-modal__icon">↩️</div>
+      <h2 class="return-modal__title">Заявка на возврат</h2>
+      <p class="return-modal__sub">Заполните форму — мы свяжемся с вами в течение 24 часов и согласуем детали</p>
+    </div>
+    <div class="return-modal__body">
+      <div class="return-status-msg">
+        📋 По закону РК вы вправе вернуть товар надлежащего качества в течение <b>14 дней</b> с момента получения.
+      </div>
+      <form id="returnForm" autocomplete="off">
+        <div class="return-sec">Ваши контактные данные</div>
+        <div class="checkout-grid">
+          <div class="form-group">
+            <label>Имя и фамилия *</label>
+            <input type="text" name="name" required placeholder="Как к вам обращаться">
+          </div>
+          <div class="form-group">
+            <label>Телефон *</label>
+            <input type="tel" name="phone" required placeholder="+7 (7XX) XXX-XX-XX" id="returnPhone">
+          </div>
+        </div>
+        <div class="checkout-grid">
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="email" placeholder="email@example.com">
+          </div>
+          <div class="form-group">
+            <label>Номер заказа</label>
+            <input type="text" name="orderId" placeholder="Из подтверждения заказа">
+          </div>
+        </div>
+
+        <div class="return-sec">Информация о товаре</div>
+        <div class="checkout-grid">
+          <div class="form-group">
+            <label>Название товара *</label>
+            <input type="text" name="product" required placeholder="Как указано в заказе">
+          </div>
+          <div class="form-group">
+            <label>Размер</label>
+            <input type="text" name="size" placeholder="Например: M или 75C">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Причина возврата *</label>
+          <select name="reason" required>
+            <option value="">Выберите причину...</option>
+            <option value="wrong_size">Не подошёл размер</option>
+            <option value="defect">Брак / дефект изделия</option>
+            <option value="not_as_described">Товар не соответствует описанию</option>
+            <option value="changed_mind">Передумала / изменились планы</option>
+            <option value="wrong_item">Прислали не тот товар</option>
+            <option value="other">Другая причина</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Опишите ситуацию подробнее</label>
+          <textarea name="description" rows="3" placeholder="Любые подробности, которые помогут нам решить вопрос быстрее..."></textarea>
+        </div>
+
+        <div class="return-sec">Желаемое решение</div>
+        <div class="resolution-list">
+          <label class="resolution-opt">
+            <input type="radio" name="resolution" value="refund" onchange="toggleReturnBank(this)">
+            <span class="resolution-opt__icon">💳</span>
+            <div>
+              <div>Возврат денег на карту / Kaspi</div>
+              <div style="font-size:.75rem;font-weight:400;color:var(--color-gray);margin-top:2px">Зачисление в течение 3–5 рабочих дней</div>
+            </div>
+          </label>
+          <label class="resolution-opt">
+            <input type="radio" name="resolution" value="exchange" onchange="toggleReturnBank(this)">
+            <span class="resolution-opt__icon">🔄</span>
+            <div>
+              <div>Обмен на другой размер или товар</div>
+              <div style="font-size:.75rem;font-weight:400;color:var(--color-gray);margin-top:2px">Подберём подходящий вариант</div>
+            </div>
+          </label>
+          <label class="resolution-opt">
+            <input type="radio" name="resolution" value="certificate" onchange="toggleReturnBank(this)">
+            <span class="resolution-opt__icon">🎁</span>
+            <div>
+              <div>Подарочный сертификат LORA</div>
+              <div style="font-size:.75rem;font-weight:400;color:var(--color-gray);margin-top:2px">Сертификат на полную сумму заказа</div>
+            </div>
+          </label>
+        </div>
+        <div class="return-bank-field form-group" id="returnBankField">
+          <label>Номер карты или телефон Kaspi *</label>
+          <input type="text" name="bankDetail" placeholder="+7 777 ... или 4400 xxxx xxxx xxxx">
+        </div>
+
+        <button type="submit" class="btn btn--primary btn--full" id="returnSubmitBtn">Отправить заявку</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Scroll to Top -->
+<button class="scroll-top" id="scrollTop" aria-label="Наверх">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg>
+</button>
+
+<script src="/js/main.js"></script>
+</body>
+</html>

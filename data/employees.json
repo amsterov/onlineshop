@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "username": "admin",
+    "password": "$2a$12$g6p3nnCtkUstgjNsp1pZMO/AsXaI14Cw.fUrDWchSSMnIpcIk59E6",
+    "name": "Главный администратор",
+    "role": "admin",
+    "email": "admin@lora.kz",
+    "phone": "+7 (707)7750168",
+    "active": true,
+    "failedAttempts": 0,
+    "lockUntil": null,
+    "lastLogin": "2026-05-25T18:15:50.728Z",
+    "createdAt": "2026-05-25T18:15:07.720Z"
+  },
+  {
+    "id": 2,
+    "username": "manager",
+    "password": "$2a$12$g5YMzFrrLIDKk/cQWsMqkeGXoibQmVLcPUMJ3evgcBjmWSGdi0ml2",
+    "name": "Менеджер",
+    "role": "manager",
+    "email": "manager@lora.kz",
+    "phone": "+7 (727) 000-00-02",
+    "active": true,
+    "failedAttempts": 0,
+    "lockUntil": null,
+    "lastLogin": null,
+    "createdAt": "2026-05-25T18:15:08.003Z"
+  },
+  {
+    "id": 3,
+    "username": "staff",
+    "password": "$2a$12$I2Xgavfcm8.y3KE6fIbZG./NRlPkcjeXNXKDOxRw1Is7eZgLfovG.",
+    "name": "Сотрудник",
+    "role": "viewer",
+    "email": "staff@lora.kz",
+    "phone": "+7 (727) 000-00-03",
+    "active": true,
+    "failedAttempts": 0,
+    "lockUntil": null,
+    "lastLogin": null,
+    "createdAt": "2026-05-25T18:15:08.278Z"
+  }
+]

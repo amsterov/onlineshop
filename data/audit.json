@@ -1,0 +1,23 @@
+[
+  {
+    "timestamp": "2026-05-25T18:50:45.084Z",
+    "username": "admin",
+    "action": "employee_updated_admin",
+    "ip": "::1",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+  },
+  {
+    "timestamp": "2026-05-25T18:27:54.367Z",
+    "username": "admin",
+    "action": "product_created_9",
+    "ip": "::1",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+  },
+  {
+    "timestamp": "2026-05-25T18:15:50.732Z",
+    "username": "admin",
+    "action": "login_success",
+    "ip": "::1",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+  }
+]

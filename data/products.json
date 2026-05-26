@@ -1,0 +1,254 @@
+[
+  {
+    "id": 1,
+    "v": 2,
+    "name": "Шёлковый комплект «Роза»",
+    "price": 14900,
+    "oldPrice": 19900,
+    "category": "sets",
+    "description": "Роскошный комплект из натурального шёлка. Нежная отделка французским кружевом придаёт изысканный вид. Бюстгальтер и трусики в комплекте.",
+    "image": "/images/default/p1.jpg",
+    "sizes": [
+      "70B",
+      "70C",
+      "75B",
+      "75C",
+      "75D",
+      "80B",
+      "80C",
+      "80D"
+    ],
+    "colors": [
+      "#f4b8c8",
+      "#fff",
+      "#1a1a2e"
+    ],
+    "badge": "Хит продаж",
+    "inStock": true,
+    "rating": 4.8,
+    "reviews": 124,
+    "sizeType": "bra"
+  },
+  {
+    "id": 2,
+    "v": 2,
+    "name": "Кружевной бюстгальтер «Нуар»",
+    "price": 8500,
+    "oldPrice": null,
+    "category": "bras",
+    "description": "Изящный бюстгальтер из французского кружева. Анатомические чашки создают идеальный силуэт и обеспечивают комфорт на весь день.",
+    "image": "/images/default/p2.jpg",
+    "sizes": [
+      "70A",
+      "70B",
+      "70C",
+      "75A",
+      "75B",
+      "75C",
+      "75D",
+      "80B",
+      "80C",
+      "80D",
+      "85B",
+      "85C"
+    ],
+    "colors": [
+      "#1a1a2e",
+      "#f4b8c8"
+    ],
+    "badge": null,
+    "inStock": true,
+    "rating": 4.6,
+    "reviews": 87,
+    "sizeType": "bra"
+  },
+  {
+    "id": 3,
+    "v": 2,
+    "name": "Боди «Соблазн»",
+    "price": 18900,
+    "oldPrice": 24900,
+    "category": "bodies",
+    "description": "Элегантное боди с глубоким вырезом и кружевными вставками. Идеально для особых случаев. Застёжка на кнопках.",
+    "image": "/images/default/p3.jpg",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "colors": [
+      "#1a1a2e",
+      "#fff",
+      "#c9a96e"
+    ],
+    "badge": "Новинка",
+    "inStock": true,
+    "rating": 4.9,
+    "reviews": 56,
+    "sizeType": "clothing"
+  },
+  {
+    "id": 4,
+    "v": 2,
+    "name": "Трусики «Пион»",
+    "price": 3900,
+    "oldPrice": null,
+    "category": "panties",
+    "description": "Нежные трусики из микрофибры с кружевной отделкой. Бесшовный крой. Максимальный комфорт для каждого дня.",
+    "image": "/images/default/p4.jpg",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL",
+      "XXL"
+    ],
+    "colors": [
+      "#f4b8c8",
+      "#c9a96e",
+      "#1a1a2e"
+    ],
+    "badge": null,
+    "inStock": true,
+    "rating": 4.5,
+    "reviews": 203,
+    "sizeType": "clothing"
+  },
+  {
+    "id": 5,
+    "v": 2,
+    "name": "Пеньюар «Мечта»",
+    "price": 24900,
+    "oldPrice": 32000,
+    "category": "nightwear",
+    "description": "Воздушный пеньюар из шифона с кружевным лифом. Длина макси. Создаёт незабываемое романтическое настроение.",
+    "image": "/images/default/p5.jpg",
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "XXL"
+    ],
+    "colors": [
+      "#f4b8c8",
+      "#fff"
+    ],
+    "badge": "Бестселлер",
+    "inStock": true,
+    "rating": 4.7,
+    "reviews": 91,
+    "sizeType": "clothing"
+  },
+  {
+    "id": 6,
+    "v": 2,
+    "name": "Корсет «Версаль»",
+    "price": 34900,
+    "oldPrice": null,
+    "category": "corsets",
+    "description": "Роскошный корсет со стальными косточками и атласными лентами. Подчёркивает талию. Ручная работа, эксклюзивное исполнение.",
+    "image": "/images/default/p6.jpg",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "colors": [
+      "#1a1a2e",
+      "#c9a96e"
+    ],
+    "badge": "Эксклюзив",
+    "inStock": true,
+    "rating": 4.9,
+    "reviews": 42,
+    "sizeType": "clothing"
+  },
+  {
+    "id": 7,
+    "v": 2,
+    "name": "Комплект «Жасмин»",
+    "price": 12900,
+    "oldPrice": 16500,
+    "category": "sets",
+    "description": "Нежный комплект с цветочным принтом. Мягкая микрофибра для ежедневного комфорта. Включает бюстгальтер и трусики.",
+    "image": "/images/default/p7.jpg",
+    "sizes": [
+      "70A",
+      "70B",
+      "75A",
+      "75B",
+      "75C",
+      "80B",
+      "80C"
+    ],
+    "colors": [
+      "#f4b8c8",
+      "#fff"
+    ],
+    "badge": null,
+    "inStock": true,
+    "rating": 4.4,
+    "reviews": 168,
+    "sizeType": "bra"
+  },
+  {
+    "id": 8,
+    "v": 2,
+    "name": "Пижама «Луна»",
+    "price": 19900,
+    "oldPrice": 25900,
+    "category": "nightwear",
+    "description": "Шёлковая пижама с изысканным кружевным воротником. Включает рубашку и брюки. Роскошь каждую ночь.",
+    "image": "/images/default/p8.jpg",
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "XXL"
+    ],
+    "colors": [
+      "#c9a96e",
+      "#f4b8c8",
+      "#1a1a2e"
+    ],
+    "badge": "Скидка",
+    "inStock": true,
+    "rating": 4.6,
+    "reviews": 77,
+    "sizeType": "clothing"
+  },
+  {
+    "id": 9,
+    "v": 2,
+    "name": "пижама хелоу кити",
+    "price": 20000,
+    "oldPrice": null,
+    "category": "nightwear",
+    "description": "чоткая",
+    "image": "/images/products/prod_1779733674361_4son5s.jpg",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL",
+      "XXL"
+    ],
+    "colors": [
+      "розовый",
+      "белый"
+    ],
+    "badge": "Новинка",
+    "inStock": true,
+    "rating": 5,
+    "reviews": 0,
+    "sizeType": "clothing"
+  }
+]
