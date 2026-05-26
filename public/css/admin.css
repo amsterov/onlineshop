@@ -129,6 +129,10 @@ input,select,textarea{font-family:inherit}
 .badge--new{background:#fff8e1;color:#f57f17}
 .badge--processing{background:#e3f2fd;color:#1565c0}
 
+/* ORDER ID LINK */
+.order-id-link { cursor: pointer; color: var(--color-primary); text-decoration: underline; text-underline-offset: 3px; }
+.order-id-link:hover { opacity: .7; }
+
 /* RETURN DETAIL */
 .detail-section { padding: 10px 0; border-bottom: 1px solid var(--color-border); }
 .detail-section:last-of-type { border-bottom: none; }

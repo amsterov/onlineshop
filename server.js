@@ -352,7 +352,7 @@ app.post('/api/admin/products', ...canEditProducts, upload.single('image'), (req
     name: sanitize(String(b.name).trim()),
     price: Math.abs(parseFloat(b.price)) || 0,
     oldPrice: b.oldPrice ? Math.abs(parseFloat(b.oldPrice)) : null,
-    category: ['sets','bras','panties','bodies','corsets','nightwear'].includes(b.category) ? b.category : 'sets',
+    category: sanitize(String(b.category || '').trim()),
     description: sanitize(String(b.description || '').trim()),
     image: req.file ? `/images/products/${req.file.filename}` : sanitize(String(b.imageUrl || '/images/default/p1.jpg')),
     sizes: b.sizes ? b.sizes.split(',').map(s => sanitize(s.trim())).filter(Boolean) : [],
@@ -381,7 +381,7 @@ app.put('/api/admin/products/:id', ...canEditProducts, upload.single('image'), (
     name: sanitize(String(b.name || products[idx].name).trim()),
     price: Math.abs(parseFloat(b.price) || products[idx].price),
     oldPrice: b.oldPrice ? Math.abs(parseFloat(b.oldPrice)) : null,
-    category: ['sets','bras','panties','bodies','corsets','nightwear'].includes(b.category) ? b.category : products[idx].category,
+    category: sanitize(String(b.category || '').trim()) || products[idx].category,
     description: sanitize(String(b.description || products[idx].description).trim()),
     image: req.file ? `/images/products/${req.file.filename}` : (b.imageUrl ? sanitize(b.imageUrl) : products[idx].image),
     sizes: b.sizes ? b.sizes.split(',').map(s => sanitize(s.trim())).filter(Boolean) : products[idx].sizes,
@@ -410,6 +410,13 @@ app.delete('/api/admin/products/:id', authMiddleware, requireRole('admin'), (req
 // ===== ADMIN ORDERS =====
 app.get('/api/admin/orders', ...canViewAdmin, (req, res) => {
   res.json(readJSON(ORDERS_FILE) || []);
+});
+
+app.get('/api/admin/orders/:id', ...canViewAdmin, (req, res) => {
+  const orders = readJSON(ORDERS_FILE) || [];
+  const order = orders.find(o => o.id === parseInt(req.params.id));
+  if (!order) return res.status(404).json({ error: 'Заказ не найден' });
+  res.json(order);
 });
 
 app.put('/api/admin/orders/:id/status', ...canEditProducts, (req, res) => {
@@ -543,6 +550,75 @@ app.post('/api/admin/change-password', authMiddleware, (req, res) => {
 // ===== ADMIN AUDIT LOG =====
 app.get('/api/admin/audit', authMiddleware, requireRole('admin'), (req, res) => {
   res.json((readJSON(AUDIT_FILE) || []).slice(0, 100));
+});
+
+// ===== CATEGORIES =====
+const CATEGORIES_FILE = path.join(DATA_DIR, 'categories.json');
+const DEFAULT_CATEGORIES = [
+  { id:1,  name:'Бюстгальтеры',       slug:'bras',       sizeType:'bra',      createdAt:new Date().toISOString() },
+  { id:2,  name:'Трусики',            slug:'panties',    sizeType:'clothing', createdAt:new Date().toISOString() },
+  { id:3,  name:'Комплекты',          slug:'sets',       sizeType:'bra',      createdAt:new Date().toISOString() },
+  { id:4,  name:'Боди',               slug:'bodies',     sizeType:'clothing', createdAt:new Date().toISOString() },
+  { id:5,  name:'Корсеты',            slug:'corsets',    sizeType:'clothing', createdAt:new Date().toISOString() },
+  { id:6,  name:'Пижамы',             slug:'nightwear',  sizeType:'clothing', createdAt:new Date().toISOString() },
+  { id:7,  name:'Купальники',         slug:'swimwear',   sizeType:'clothing', createdAt:new Date().toISOString() },
+  { id:8,  name:'Платья',             slug:'dresses',    sizeType:'clothing', createdAt:new Date().toISOString() },
+  { id:9,  name:'Блузки',             slug:'blouses',    sizeType:'clothing', createdAt:new Date().toISOString() },
+  { id:10, name:'Юбки',               slug:'skirts',     sizeType:'clothing', createdAt:new Date().toISOString() },
+  { id:11, name:'Брюки',              slug:'pants',      sizeType:'clothing', createdAt:new Date().toISOString() },
+  { id:12, name:'Чулки и колготки',   slug:'hosiery',    sizeType:'hosiery',  createdAt:new Date().toISOString() },
+  { id:13, name:'Халаты',             slug:'robes',      sizeType:'clothing', createdAt:new Date().toISOString() },
+  { id:14, name:'Спортивная одежда',  slug:'sportswear', sizeType:'clothing', createdAt:new Date().toISOString() },
+];
+if (!readJSON(CATEGORIES_FILE)) writeJSON(CATEGORIES_FILE, DEFAULT_CATEGORIES);
+
+app.get('/api/categories', (req, res) => {
+  res.json(readJSON(CATEGORIES_FILE) || []);
+});
+
+app.get('/api/admin/categories', ...canViewAdmin, (req, res) => {
+  res.json(readJSON(CATEGORIES_FILE) || []);
+});
+
+app.post('/api/admin/categories', authMiddleware, requireRole('admin'), (req, res) => {
+  const cats = readJSON(CATEGORIES_FILE) || [];
+  const { name, sizeType } = req.body;
+  if (!name || !String(name).trim()) return res.status(400).json({ error: 'Название обязательно' });
+  if (!['clothing','bra','hosiery'].includes(sizeType)) return res.status(400).json({ error: 'Недопустимый тип размеров' });
+  const slug = sanitize(String(name).trim().toLowerCase()
+    .replace(/\s+/g,'_').replace(/[^a-zа-яё0-9_]/gi,'').substring(0,40)) || `cat_${Date.now()}`;
+  if (cats.some(c => c.slug === slug)) return res.status(400).json({ error: 'Категория с таким названием уже существует' });
+  const cat = {
+    id: cats.length > 0 ? Math.max(...cats.map(c => c.id)) + 1 : 1,
+    name: sanitize(String(name).trim()),
+    slug, sizeType,
+    createdAt: new Date().toISOString()
+  };
+  cats.push(cat);
+  writeJSON(CATEGORIES_FILE, cats);
+  auditLog(req.employee.username, `category_created_${cat.slug}`, req);
+  res.json(cat);
+});
+
+app.put('/api/admin/categories/:id', authMiddleware, requireRole('admin'), (req, res) => {
+  const cats = readJSON(CATEGORIES_FILE) || [];
+  const idx = cats.findIndex(c => c.id === parseInt(req.params.id));
+  if (idx === -1) return res.status(404).json({ error: 'Не найдено' });
+  const { name, sizeType } = req.body;
+  if (name) cats[idx].name = sanitize(String(name).trim());
+  if (sizeType && ['clothing','bra','hosiery'].includes(sizeType)) cats[idx].sizeType = sizeType;
+  writeJSON(CATEGORIES_FILE, cats);
+  auditLog(req.employee.username, `category_updated_${cats[idx].slug}`, req);
+  res.json(cats[idx]);
+});
+
+app.delete('/api/admin/categories/:id', authMiddleware, requireRole('admin'), (req, res) => {
+  const cats = readJSON(CATEGORIES_FILE) || [];
+  const target = cats.find(c => c.id === parseInt(req.params.id));
+  if (!target) return res.status(404).json({ error: 'Не найдено' });
+  writeJSON(CATEGORIES_FILE, cats.filter(c => c.id !== target.id));
+  auditLog(req.employee.username, `category_deleted_${target.slug}`, req);
+  res.json({ success: true });
 });
 
 // ===== RETURNS =====

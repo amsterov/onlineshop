@@ -1,9 +1,15 @@
 // ===== STATE =====
 let adminToken = localStorage.getItem('lora_admin_token') || '';
 let currentEmployee = null;
-let allProducts = [], allOrders = [], allEmployees = [], allReturns = [];
+let allProducts = [], allOrders = [], allEmployees = [], allReturns = [], allCategories = [];
 let deleteTarget = null;
 let deleteType = '';
+
+const SIZE_PRESETS = {
+  bra:      '70A, 70B, 70C, 75A, 75B, 75C, 80A, 80B, 80C, 80D, 85B, 85C, 85D',
+  hosiery:  '1, 2, 3, 4, 5',
+  clothing: 'XS (40-42), S (42-44), M (44-46), L (46-48), XL (48-50), XXL (50-52)',
+};
 
 // ===== XSS PREVENTION =====
 function esc(s) {
@@ -21,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSidebar();
   initProductForm();
   initEmployeeForm();
+  initCategoryForm();
   initDeleteModal();
   initSearches();
   initChangePassForm();
@@ -115,6 +122,7 @@ function showApp() {
     el.style.display = ['admin','manager'].includes(currentEmployee?.role) ? 'flex' : 'none';
   });
 
+  loadCategories();
   navigateTo('dashboard');
 }
 
@@ -142,12 +150,11 @@ function initSidebar() {
   document.getElementById('sidebarToggle').addEventListener('click', () => {
     document.getElementById('adminSidebar').classList.toggle('open');
   });
+
 }
 
 function navigateTo(page) {
-  // Check access
-  const adminPages = ['employees', 'audit'];
-  const editorPages = ['products', 'orders'];
+  const adminPages = ['employees', 'audit', 'categories'];
   if (adminPages.includes(page) && currentEmployee?.role !== 'admin') {
     adminToast('Недостаточно прав доступа', 'error'); return;
   }
@@ -158,13 +165,14 @@ function navigateTo(page) {
   if (el) el.style.display = 'block';
   const nav = document.querySelector(`.admin-nav__item[data-page="${page}"]`);
   if (nav) nav.classList.add('active');
-  const titles = { dashboard:'Дашборд', products:'Товары', orders:'Заказы', employees:'Сотрудники', audit:'Журнал безопасности', returns:'Заявки на возврат', password:'Сменить пароль' };
+  const titles = { dashboard:'Дашборд', products:'Товары', orders:'Заказы', employees:'Сотрудники', categories:'Категории', audit:'Журнал безопасности', returns:'Заявки на возврат', password:'Сменить пароль' };
   document.getElementById('pageTitle').textContent = titles[page] || page;
 
   if (page === 'dashboard') loadDashboard();
   else if (page === 'products') loadProductsPage();
   else if (page === 'orders') loadOrdersPage();
   else if (page === 'employees') loadEmployeesPage();
+  else if (page === 'categories') loadCategoriesPage();
   else if (page === 'audit') loadAuditPage();
   else if (page === 'returns') loadReturnsPage();
 }
@@ -186,7 +194,7 @@ async function loadDashboard() {
     const tbody = document.getElementById('dashOrdersBody');
     tbody.innerHTML = orders.slice(0, 7).map(o => `
       <tr>
-        <td><b>#${o.id}</b></td>
+        <td><b class="order-id-link" onclick="showOrderDetail('${o.id}')">#${o.id}</b></td>
         <td>${esc(o.name || '—')}</td>
         <td>${esc(o.city || '—')}</td>
         <td><b>${fmt(o.total)}</b></td>
@@ -206,8 +214,12 @@ async function loadProductsPage() {
 }
 
 function renderProductsTable(products) {
-  const EMOJIS = { sets:'👙', bras:'🩱', panties:'🩲', bodies:'💃', corsets:'🎀', nightwear:'🌙' };
-  const CATS = { sets:'Комплекты', bras:'Бюстгальтеры', panties:'Трусики', bodies:'Боди', corsets:'Корсеты', nightwear:'Пижамы' };
+  const EMOJIS = { sets:'👙', bras:'🩱', panties:'🩲', bodies:'💃', corsets:'🎀', nightwear:'🌙', swimwear:'🩱', homewear:'🏠', accessories:'💎', socks:'🧦', tights:'🦵', sportswear:'🏋️' };
+  const SIZE_TYPE_LABELS = { clothing:'Одежные размеры', bra:'Размеры бюстгальтера', hosiery:'Чулочные размеры' };
+  const getCatName = slug => {
+    const cat = allCategories.find(c => c.slug === slug);
+    return cat ? cat.name : slug;
+  };
   const canEdit = ['admin','manager'].includes(currentEmployee?.role);
 
   const tbody = document.getElementById('productsTableBody');
@@ -219,11 +231,11 @@ function renderProductsTable(products) {
           <div class="prod-thumb">${EMOJIS[p.category] || '🛍️'}</div>
           <div>
             <div class="prod-name">${esc(p.name)}</div>
-            <div class="prod-meta">${p.sizeType === 'bra' ? 'Размеры бюстгальтера' : 'Одежные размеры'} · ${(p.sizes||[]).slice(0,3).map(esc).join(', ')}${p.sizes?.length > 3 ? '...' : ''}</div>
+            <div class="prod-meta">${SIZE_TYPE_LABELS[p.sizeType] || 'Одежные размеры'} · ${(p.sizes||[]).slice(0,3).map(esc).join(', ')}${p.sizes?.length > 3 ? '...' : ''}</div>
           </div>
         </div>
       </td>
-      <td>${esc(CATS[p.category] || p.category)}</td>
+      <td>${esc(getCatName(p.category))}</td>
       <td>
         <b>${fmt(p.price)}</b>
         ${p.oldPrice ? `<br><span style="color:var(--color-gray);font-size:.75rem;text-decoration:line-through">${fmt(p.oldPrice)}</span>` : ''}
@@ -353,23 +365,26 @@ function initProductForm() {
 }
 
 window.updateSizeType = function() {
-  const cat = document.getElementById('pCategory').value;
-  const braCategories = ['sets', 'bras'];
-  document.getElementById('pSizeType').value = braCategories.includes(cat) ? 'bra' : 'clothing';
-  fillDefaultSizes();
+  const slug = document.getElementById('pCategory').value;
+  const cat = allCategories.find(c => c.slug === slug);
+  if (cat) {
+    document.getElementById('pSizeType').value = cat.sizeType || 'clothing';
+    fillDefaultSizes();
+  }
 };
 
 window.fillDefaultSizes = function() {
   const type = document.getElementById('pSizeType').value;
   const sizesField = document.getElementById('pSizes');
   if (!sizesField.value) {
-    sizesField.value = type === 'bra'
-      ? '70B, 70C, 75B, 75C, 75D, 80B, 80C, 80D'
-      : 'XS, S, M, L, XL, XXL';
+    sizesField.value = SIZE_PRESETS[type] || SIZE_PRESETS.clothing;
   }
 };
 
-window.setSizes = s => { document.getElementById('pSizes').value = s; };
+window.applyPreset = function(type) {
+  document.getElementById('pSizeType').value = type;
+  document.getElementById('pSizes').value = SIZE_PRESETS[type] || '';
+};
 
 function openProductModal(product = null) {
   document.getElementById('productForm').reset();
@@ -377,10 +392,15 @@ function openProductModal(product = null) {
   document.getElementById('colorPreviewChips').innerHTML = '';
   document.getElementById('productFormTitle').textContent = product ? 'Редактировать товар' : 'Добавить товар';
 
+  // Populate categories dropdown
+  const catSel = document.getElementById('pCategory');
+  catSel.innerHTML = '<option value="">Выберите...</option>' +
+    allCategories.map(c => `<option value="${esc(c.slug)}">${esc(c.name)}</option>`).join('');
+
   if (product) {
     document.getElementById('productId').value = product.id;
     document.getElementById('pName').value = product.name;
-    document.getElementById('pCategory').value = product.category;
+    catSel.value = product.category;
     document.getElementById('pPrice').value = product.price;
     document.getElementById('pOldPrice').value = product.oldPrice || '';
     document.getElementById('pDescription').value = product.description;
@@ -464,7 +484,7 @@ function renderOrdersTable(orders) {
   const tbody = document.getElementById('ordersTableBody');
   tbody.innerHTML = orders.map(o => `
     <tr>
-      <td><b>#${o.id}</b></td>
+      <td><b class="order-id-link" onclick="showOrderDetail('${o.id}')">#${o.id}</b></td>
       <td>
         <div style="font-weight:500">${esc(o.name || '—')}</div>
         <div style="font-size:.72rem;color:var(--color-gray)">${esc(o.email || '')}</div>
@@ -702,6 +722,11 @@ function initDeleteModal() {
         await apiFetch(`/api/admin/employees/${deleteTarget}`, { method: 'DELETE' });
         adminToast('Сотрудник удалён', 'success');
         loadEmployeesPage();
+      } else if (deleteType === 'category') {
+        await apiFetch(`/api/admin/categories/${deleteTarget}`, { method: 'DELETE' });
+        adminToast('Категория удалена', 'success');
+        await loadCategories();
+        loadCategoriesPage();
       }
       closeDeleteModal();
     } catch (ex) { adminToast(ex.message, 'error'); }
@@ -737,6 +762,12 @@ function initSearches() {
   });
   document.getElementById('returnSearch').addEventListener('input', filterReturns);
   document.getElementById('returnStatusFilter').addEventListener('change', filterReturns);
+  document.getElementById('categorySearch').addEventListener('input', e => {
+    const q = e.target.value.toLowerCase();
+    renderCategoriesTable(allCategories.filter(c =>
+      c.name.toLowerCase().includes(q) || c.slug.toLowerCase().includes(q)
+    ));
+  });
 }
 
 function filterOrders() {
@@ -885,6 +916,174 @@ window.openReturnDetail = id => {
 
 window.closeReturnDetail = () => {
   document.getElementById('returnDetailBg').classList.remove('show');
+};
+
+// ===== ORDER DETAIL =====
+window.showOrderDetail = function(idStr) {
+  const id = Number(idStr);
+  const o = allOrders.find(function(x) { return x.id === id; });
+  if (!o) { alert('Заказ не найден (id=' + idStr + ')'); return; }
+  renderOrderDetail(o);
+};
+
+function renderOrderDetail(o) {
+  document.getElementById('orderDetailTitle').textContent = `Заказ #${o.id}`;
+
+  const itemsRows = (o.items || []).map(it => {
+    const colorDot = it.color
+      ? `<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${esc(it.color)};border:1px solid #ccc;margin-right:4px;vertical-align:middle"></span>`
+      : '';
+    const size = it.size ? `<span style="color:var(--color-gray);font-size:.75rem"> · ${esc(it.size)}</span>` : '';
+    return `
+      <tr>
+        <td style="font-size:.85rem;padding:6px 0">${colorDot}${esc(it.name || '—')}${size}</td>
+        <td style="text-align:center;font-size:.85rem;padding:6px">${it.qty || 1}</td>
+        <td style="text-align:right;font-size:.85rem;white-space:nowrap;padding:6px 0">${fmt(it.price)}</td>
+        <td style="text-align:right;font-size:.85rem;font-weight:600;white-space:nowrap;padding:6px 0">${fmt((it.price || 0) * (it.qty || 1))}</td>
+      </tr>
+    `;
+  }).join('') || `<tr><td colspan="4" style="color:var(--color-gray);font-size:.82rem;padding:8px 0">Нет данных о товарах</td></tr>`;
+
+  document.getElementById('orderDetailBody').innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:14px">
+
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+        <span style="font-size:.75rem;color:var(--color-gray)">${formatDate(o.createdAt)}</span>
+        ${statusBadge(o.status)}
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-label">Покупатель</div>
+        <div class="detail-value">${esc(o.name || '—')}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:16px;margin-top:6px">
+          ${o.phone ? `<a href="tel:${esc(o.phone)}" style="font-size:.83rem;color:var(--color-primary);text-decoration:none">📞 ${esc(o.phone)}</a>` : ''}
+          ${o.email ? `<a href="mailto:${esc(o.email)}" style="font-size:.83rem;color:var(--color-primary);text-decoration:none">✉️ ${esc(o.email)}</a>` : ''}
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-label">Адрес доставки</div>
+        <div class="detail-value">${esc(o.city || '—')}${o.address ? `, ${esc(o.address)}` : ''}</div>
+      </div>
+
+      ${o.comment ? `
+      <div class="detail-section">
+        <div class="detail-label">Комментарий</div>
+        <div style="font-size:.85rem;line-height:1.6;color:#444">${esc(o.comment)}</div>
+      </div>` : ''}
+
+      <div class="detail-section">
+        <div class="detail-label">Состав заказа</div>
+        <div style="margin-top:8px;overflow-x:auto">
+          <table style="width:100%;border-collapse:collapse">
+            <thead>
+              <tr style="border-bottom:1px solid var(--color-border)">
+                <th style="text-align:left;font-size:.72rem;font-weight:600;color:var(--color-gray);padding:4px 0;text-transform:uppercase;letter-spacing:.06em">Товар</th>
+                <th style="text-align:center;font-size:.72rem;font-weight:600;color:var(--color-gray);padding:4px 6px;text-transform:uppercase;letter-spacing:.06em">Кол-во</th>
+                <th style="text-align:right;font-size:.72rem;font-weight:600;color:var(--color-gray);padding:4px 0;text-transform:uppercase;letter-spacing:.06em">Цена</th>
+                <th style="text-align:right;font-size:.72rem;font-weight:600;color:var(--color-gray);padding:4px 0;text-transform:uppercase;letter-spacing:.06em">Итого</th>
+              </tr>
+            </thead>
+            <tbody style="border-bottom:1px solid var(--color-border)">${itemsRows}</tbody>
+          </table>
+        </div>
+        <div style="display:flex;justify-content:flex-end;margin-top:10px;padding-top:8px;border-top:2px solid var(--color-border)">
+          <span style="font-size:1rem;font-weight:700">Итого: ${fmt(o.total)}</span>
+        </div>
+      </div>
+
+    </div>
+  `;
+  document.getElementById('orderDetailBg').classList.add('show');
+}
+
+window.closeOrderDetail = () => {
+  document.getElementById('orderDetailBg').classList.remove('show');
+};
+
+// ===== CATEGORIES =====
+async function loadCategories() {
+  try {
+    allCategories = await apiFetch('/api/admin/categories');
+  } catch { /* silent — non-critical on first load */ }
+}
+
+async function loadCategoriesPage() {
+  try {
+    allCategories = await apiFetch('/api/admin/categories');
+    renderCategoriesTable(allCategories);
+  } catch (ex) { adminToast(ex.message, 'error'); }
+}
+
+function renderCategoriesTable(categories) {
+  const SIZE_TYPE_LABELS = { clothing:'Одежда', bra:'Бюстгальтер', hosiery:'Чулочные' };
+  const tbody = document.getElementById('categoriesTableBody');
+  tbody.innerHTML = categories.map(c => `
+    <tr>
+      <td style="color:var(--color-gray)">#${c.id}</td>
+      <td><b>${esc(c.name)}</b></td>
+      <td><code style="background:var(--color-gray-light);padding:2px 8px;border-radius:4px;font-size:.8rem">${esc(c.slug)}</code></td>
+      <td>${esc(SIZE_TYPE_LABELS[c.sizeType] || c.sizeType)}</td>
+      <td>
+        <div class="action-btns">
+          <button class="action-btn action-btn--edit" onclick="editCategory(${c.id})" title="Редактировать">✏️</button>
+          <button class="action-btn action-btn--delete" onclick="confirmDeleteCategory(${c.id},'${esc(c.name)}')" title="Удалить">🗑️</button>
+        </div>
+      </td>
+    </tr>
+  `).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--color-gray);padding:40px">Нет категорий</td></tr>';
+}
+
+function initCategoryForm() {
+  document.getElementById('addCategoryBtn').addEventListener('click', () => openCategoryModal());
+  document.getElementById('categoryForm').addEventListener('submit', saveCategory);
+}
+
+function openCategoryModal(cat = null) {
+  document.getElementById('categoryForm').reset();
+  document.getElementById('categoryFormTitle').textContent = cat ? 'Редактировать категорию' : 'Добавить категорию';
+  document.getElementById('categoryId').value = cat ? cat.id : '';
+  if (cat) {
+    document.getElementById('cName').value = cat.name;
+    document.getElementById('cSizeType').value = cat.sizeType || 'clothing';
+  }
+  document.getElementById('categoryModalBg').classList.add('show');
+}
+
+window.editCategory = id => {
+  const c = allCategories.find(x => x.id === id);
+  if (c) openCategoryModal(c);
+};
+
+window.closeCategoryModal = () => {
+  document.getElementById('categoryModalBg').classList.remove('show');
+};
+
+async function saveCategory(e) {
+  e.preventDefault();
+  const id = document.getElementById('categoryId').value;
+  const body = {
+    name: document.getElementById('cName').value,
+    sizeType: document.getElementById('cSizeType').value,
+  };
+  try {
+    await apiFetch(id ? `/api/admin/categories/${id}` : '/api/admin/categories', {
+      method: id ? 'PUT' : 'POST',
+      body: JSON.stringify(body),
+      headers: { 'Content-Type': 'application/json' }
+    });
+    window.closeCategoryModal();
+    adminToast(id ? 'Категория обновлена ✓' : 'Категория добавлена ✓', 'success');
+    await loadCategories();
+    loadCategoriesPage();
+  } catch (ex) { adminToast(ex.message, 'error'); }
+}
+
+window.confirmDeleteCategory = (id, name) => {
+  deleteTarget = id; deleteType = 'category';
+  document.getElementById('deleteConfirmText').textContent =
+    `Удалить категорию «${name}»? Это действие нельзя отменить.`;
+  document.getElementById('confirmDeleteBg').classList.add('show');
 };
 
 // ===== HELPERS =====

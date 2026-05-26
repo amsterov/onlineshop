@@ -7,7 +7,7 @@ let currentSort = '';
 let currentSearch = '';
 let modalQtyVal = 1;
 
-const CATEGORIES = { all:'Все', sets:'Комплекты', bras:'Бюстгальтеры', panties:'Трусики', bodies:'Боди', corsets:'Корсеты', nightwear:'Пижамы' };
+let CATEGORIES = { all:'Все', sets:'Комплекты', bras:'Бюстгальтеры', panties:'Трусики', bodies:'Боди', corsets:'Корсеты', nightwear:'Пижамы' };
 
 // Maps Russian color names → CSS color (supports both text names and HEX)
 const COLOR_NAME_MAP = {
@@ -134,8 +134,15 @@ function closeNav() {
 // ===== PRODUCTS =====
 async function loadProducts() {
   try {
-    const res = await fetch('/api/products');
-    allProducts = await res.json();
+    const [productsRes, catsRes] = await Promise.all([
+      fetch('/api/products'),
+      fetch('/api/categories')
+    ]);
+    allProducts = await productsRes.json();
+    if (catsRes.ok) {
+      const cats = await catsRes.json();
+      cats.forEach(c => { CATEGORIES[c.slug] = c.name; });
+    }
     renderProducts();
   } catch (e) {
     document.getElementById('productsEmpty').style.display = 'block';

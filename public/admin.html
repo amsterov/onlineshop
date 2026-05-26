@@ -72,6 +72,10 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         Сотрудники
       </a>
+      <a href="#" class="admin-nav__item admin-only" data-page="categories">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+        Категории
+      </a>
       <a href="#" class="admin-nav__item admin-only" data-page="audit">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         Журнал безопасности
@@ -179,6 +183,20 @@
       </div>
     </div>
 
+    <!-- CATEGORIES -->
+    <div class="admin-page" id="page-categories" style="display:none">
+      <div class="page-actions">
+        <div class="search-wrap"><input type="text" id="categorySearch" placeholder="Поиск категорий..."></div>
+        <button class="btn btn--primary" id="addCategoryBtn">+ Добавить категорию</button>
+      </div>
+      <div class="table-wrap">
+        <table class="admin-table">
+          <thead><tr><th>ID</th><th>Название</th><th>Slug</th><th>Тип размеров</th><th>Действия</th></tr></thead>
+          <tbody id="categoriesTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
     <!-- RETURNS -->
     <div class="admin-page" id="page-returns" style="display:none">
       <div class="page-actions">
@@ -272,12 +290,6 @@
             <label>Категория *</label>
             <select id="pCategory" required onchange="updateSizeType()">
               <option value="">Выберите...</option>
-              <option value="sets">Комплекты</option>
-              <option value="bras">Бюстгальтеры</option>
-              <option value="panties">Трусики</option>
-              <option value="bodies">Боди</option>
-              <option value="corsets">Корсеты</option>
-              <option value="nightwear">Пижамы / Домашняя одежда</option>
             </select>
           </div>
         </div>
@@ -291,7 +303,8 @@
             <label>Тип размеров</label>
             <select id="pSizeType" onchange="fillDefaultSizes()">
               <option value="clothing">Одежда (XS–XXL)</option>
-              <option value="bra">Бюстгальтер (70B, 75C...)</option>
+              <option value="bra">Бюстгальтер (70A, 75B...)</option>
+              <option value="hosiery">Чулочные (1, 2, 3, 4, 5)</option>
             </select>
           </div>
           <div class="form-group">
@@ -300,11 +313,10 @@
           </div>
         </div>
         <div class="sizes-preset">
-          <span class="preset-label">Быстро добавить:</span>
-          <button type="button" class="preset-btn" onclick="setSizes('XS,S,M,L,XL')">XS–XL</button>
-          <button type="button" class="preset-btn" onclick="setSizes('XS,S,M,L,XL,XXL')">XS–XXL</button>
-          <button type="button" class="preset-btn" onclick="setSizes('70A,70B,70C,75A,75B,75C,75D,80B,80C,80D')">70–80</button>
-          <button type="button" class="preset-btn" onclick="setSizes('70B,70C,75B,75C,75D,80B,80C,80D,85B,85C')">Популярные</button>
+          <span class="preset-label">Быстро:</span>
+          <button type="button" class="preset-btn" onclick="applyPreset('clothing')">XS–XXL</button>
+          <button type="button" class="preset-btn" onclick="applyPreset('bra')">Бюстгальтер</button>
+          <button type="button" class="preset-btn" onclick="applyPreset('hosiery')">Чулочные</button>
         </div>
         <div class="form-row">
           <div class="form-group">
@@ -408,6 +420,51 @@
   </div>
 </div>
 
+<!-- Category Modal -->
+<div class="modal-backdrop" id="categoryModalBg">
+  <div class="modal modal--sm">
+    <div class="modal__header">
+      <h3 id="categoryFormTitle">Добавить категорию</h3>
+      <button class="modal__close" onclick="closeCategoryModal()">✕</button>
+    </div>
+    <form id="categoryForm">
+      <input type="hidden" id="categoryId">
+      <div class="modal__body">
+        <div class="form-group">
+          <label>Название *</label>
+          <input type="text" id="cName" required placeholder="Например: Купальники">
+        </div>
+        <div class="form-group">
+          <label>Тип размеров *</label>
+          <select id="cSizeType" required>
+            <option value="clothing">Одежда — XS (40-42), S (42-44), M (44-46), L (46-48), XL (48-50), XXL (50-52)</option>
+            <option value="bra">Бюстгальтер — 70A, 70B, 70C, 75A ... 85D</option>
+            <option value="hosiery">Чулочные — 1, 2, 3, 4, 5</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button type="button" class="btn btn--outline-dark" onclick="closeCategoryModal()">Отмена</button>
+        <button type="submit" class="btn btn--primary">Сохранить</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Order Detail Modal -->
+<div class="modal-backdrop" id="orderDetailBg">
+  <div class="modal" style="max-width:580px">
+    <div class="modal__header">
+      <h3 id="orderDetailTitle">Заказ</h3>
+      <button class="modal__close" onclick="closeOrderDetail()">✕</button>
+    </div>
+    <div class="modal__body" id="orderDetailBody"></div>
+    <div class="modal__footer">
+      <button class="btn btn--outline-dark" onclick="closeOrderDetail()">Закрыть</button>
+    </div>
+  </div>
+</div>
+
 <!-- Return Detail Modal -->
 <div class="modal-backdrop" id="returnDetailBg">
   <div class="modal modal--sm">
@@ -423,6 +480,6 @@
 </div>
 
 <div class="admin-toast" id="adminToast"></div>
-<script src="/js/admin.js"></script>
+<script src="/js/admin.js?v=5"></script>
 </body>
 </html>
